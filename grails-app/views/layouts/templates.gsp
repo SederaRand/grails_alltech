@@ -7,7 +7,7 @@
         <g:layoutTitle default="Grails"/>
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
+    <asset:link rel="icon" href="AdminLTELogo.png" type="image/x-ico"/>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
@@ -32,8 +32,8 @@
     <asset:stylesheet rel="stylesheet" src="daterangepicker.css"/>
     <!-- summernote -->
     <asset:stylesheet rel="stylesheet" src="summernote-bs4.min.css"/>
-
-
+    <!-- Toast -->
+   <asset:stylesheet href="toast.min.css" rel="stylesheet"/>
 
     <g:layoutHead/>
 </head>
@@ -48,13 +48,33 @@
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
         </ul>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link" data-toggle="dropdown" href="#">
+                <i class="far fa-user"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                <a href="#" class="dropdown-item">
+                    <!-- Message Start -->
+                    <div class="media">
+                        <div class="media-body">
+                            <g:form controller="logout">
+                                <g:submitButton name="logout" class="btn btn-default" value="Logout" />
+                            </g:form>
+                        </div>
+                    </div>
+                    <!-- Message End -->
+                </a>
+            </div>
+        </li>
+    </ul>
 
     </nav>
     <!-- /.navbar -->
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
-        <a href="index3.html" class="brand-link">
+        <a href="#" class="brand-link">
             <asset:image src="AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"/>
             <span class="brand-text font-weight-light">Admin ETSENA</span>
         </a>
@@ -81,18 +101,10 @@
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>
                                 Dashboard
+
                             </p>
                         </a>
-                  </li>
-                </ul>
-                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                  <li class="nav-item menu-open">
-                        <a href="#" class="nav-link ">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>
-                                Aller au site
-                            </p>
-                        </a>
+
                   </li>
                 </ul>
             </nav>
@@ -156,38 +168,157 @@
 <asset:javascript src="adminlte.js"/>
 <!-- AdminLTE for demo purposes -->
 <asset:javascript src="demo.js"/>
+<asset:javascript src="toast.min.js"/>
 
 
 <g:javascript>
     $(function () {
-        $("#example1").DataTable({
-            "scrollY": 500,
-            "deferRender": true,
-            "scroller": true,
-            "dom": "Brtip",
-            "sFilter": "dataTables_filter",
-            "buttons": [ 'copy', 'csv', 'excel', 'pdf', 'print' ],
-            "processing": true,
+        var packageTable = $('#example1');
+        var table =packageTable.DataTable({
+            "paging": true,
+            "pageLength": 3,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+           "processing": true,
             "serverSide": true,
             "ajax": {
 					"url": "${createLink(controller: 'product', action: 'browserLister')}",
 					"type": "GET",
 				},
+			    "orderable": false,
 				"columns": [
-					{ "data": "prodName" },
+					{ "data": "prodName"},
 					{ "data": "prodCode" },
 					{ "data": "categoryName" },
 					{ "data": "prodDesc" },
 					{ "data": "prodImageUrl" },
-					{ "data": "prodStatus" },
+					{ "data": "prodStatus", "render":function (data, type, row) {
+					                            if (data === true){
+					                                return '<input type="checkbox" class="editor-active " id="Publish" checked disabled><label for="Publish">Publish</label>';
+					                            }
+					                            return '<input type="checkbox" class="editor-active " id="Publish" disabled><label for="Publish">Not Publish</label>';
+					                            return data;					  },
+					                         className: "dt-body-center"
+
+					  },
 					{ "data": "prodQuantity" },
-					{ "data": "prodPrice" }
+					{ "data": "prodPrice" },
+					{ "data": null,"render": function (data, type, row, meta) {
+                                                var deleteUrl = '${createLink(controller: 'product', action: 'delete')}';
+                                                deleteUrl += '?id='+ data.id;
+                                                console.log(data);
+                                                var content = '<div class="form-group clearfix">';
+var showContent = content + '<div class="icheck-primary d-inline"><a class="btn btn-danger btn-sm btn-remove" data-id="'+data.id+'" title="Delete"><i class="fas fa-trash-alt" aria-hidden="true"></i></a></div>';
+content = showContent + '</div>';
 
-				]
 
 
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+                                                return content
+					                                                            }
+                    },
 
+				],
+
+
+        })
+        .buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        packageTable.on('click', '.btn-remove', function (event){
+            event.preventDefault();
+            var id = $(this).data('id');
+            $('#btn-remove').data('id', id);
+
+            $('#btn-remove').modal({
+            backdrop: 'static',
+            keyboard: false
+            })
+        });
+
+        $('#delete').on('click', function (event) {
+        event.preventDefault();
+        var id = $('#btn-remove').data('id');
+        console.log(id);
+        $.ajax({
+            url: "http://localhost:8080/product/delete?id=" + id,
+            type: "DELETE",
+            success: function (data) {
+               $('#example1').DataTable().ajax.reload();
+                $('#btn-remove').modal('toggle');
+            },
+            error: function () {
+                error();
+            }
+        });
+    });
+    });
+</g:javascript>
+<g:javascript>
+    const TYPES = ['info', 'warning', 'success', 'error'],
+        TITLES = {
+            'info': 'Notice!',
+            'success': 'Awesome!',
+            'warning': 'Watch Out!',
+            'error': 'Doh!'
+        },
+        CONTENT = {
+            'info': 'Hello, world! This is a toast message.',
+            'success': 'Product add',
+            'warning': 'It\'s all about to go wrong',
+            'error': 'It all went wrong.'
+        },
+        POSITION = ['top-right', 'top-left', 'top-center', 'bottom-right', 'bottom-left', 'bottom-center'];
+
+    $.toastDefaults.position = 'top-right';
+    $.toastDefaults.dismissible = true;
+    $.toastDefaults.stackable = true;
+
+
+    $('.snack').click(function () {
+        var type = 'success',
+            delay = 3000,
+            content = CONTENT[type];
+
+        $.snack(type, content, delay);
+
+    });
+
+    $('.toast-btn-success').click(function () {
+        var rng = Math.floor(Math.random() * 2) + 1,
+            type = TYPES[Math.floor(Math.random() * TYPES.length)],
+            title = TITLES[type],
+            content = CONTENT[type];
+
+        if (rng === 1) {
+            $.toast({
+                title: 'Notice!',
+                subtitle: '11 mins ago',
+                content: 'Product add',
+                type: 'success',
+                delay: 3000,
+                dismissible: true,
+                img: {
+                    class: 'rounded',
+                    title: '<a href="https://www.jqueryscript.net/tags.php?/Thumbnail/">Thumbnail</a> Title',
+                    alt: 'Alternative'
+                }
+            });
+        } else {
+            $.toast({
+                type: type,
+                title: title,
+                subtitle: '11 mins ago',
+                content: content,
+                delay: 5000,
+                img: {
+                    src: 'https://via.placeholder.com/20',
+                    alt: 'Image'
+                }
+            });
+        }
     });
 </g:javascript>
 

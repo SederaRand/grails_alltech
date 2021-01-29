@@ -68,7 +68,6 @@ class ProductController {
         println "Product orderList $orderList"
         def filterer = {
             createAlias 'categoryName', 'c'
-
             if (columnMap.prodName.where) ilike 'prodName', columnMap.prodName.where
             if (columnMap.prodCode.where) ilike 'prodCode', columnMap.prodCode.where
             if (columnMap.categoryName.where) ilike 'c.category', columnMap.categoryName.where
@@ -107,15 +106,18 @@ class ProductController {
         }
 
         def product = orderer.collect { product ->
-            ['prodName': "<span title=\"Click for show product\"><a href='${createLink(controller: 'product', action: 'show', id: product.id)}'>${product.prodName}</a></span>",
+            ['prodName': "<span title=\"Click for show product\"><a href='${createLink(controller: 'product', action: 'edit', id: product.id)}'>${product.prodName}</a></span>",
              'prodCode': product.prodCode,
-             'categoryName': "<a href='${createLink(controller: 'product', action: 'show', id: product.categoryName?.id)}'>${product.categoryName?.category}</a>",
+             'categoryName': product.categoryName?.category,
              'prodDesc': product.prodDesc,
              'prodImageUrl': "<img src='${product.prodImageUrl}' widht='100px' height='100px'/>",
              'prodStatus': product.prodStatus,
              'prodQuantity': product.prodQuantity,
-             'prodPrice': product.prodPrice]
+             'prodPrice': product.prodPrice,
+              'id': product.id
+              ]
         }
+
         def result = [draw: jqdtParams.draw, recordsTotal: recordsTotal, recordsFiltered: recordsFiltered, data: product]
         render(result as JSON)
     }
@@ -123,6 +125,7 @@ class ProductController {
     @Secured(['ROLE_ADMIN', 'ROLE_USER'])
     def show(Long id) {
         respond productService.get(id)
+
     }
 
     @Secured(['ROLE_ADMIN'])
@@ -189,14 +192,10 @@ class ProductController {
         }
 
         productService.delete(id)
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'product.label', default: 'Product'), id])
-                redirect action: "index", method: "GET"
-            }
-            '*' { render status: NO_CONTENT }
-        }
+        Map results = [
+                status: 200
+        ]
+        render results as JSON
     }
 
     protected void notFound() {
@@ -206,6 +205,13 @@ class ProductController {
                 redirect action: "index", method: "GET"
             }
             '*' { render status: NOT_FOUND }
+        }
+    }
+
+    def status (){
+        if(productService.get().prodStatus == true)
+        {
+            
         }
     }
 

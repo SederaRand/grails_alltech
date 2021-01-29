@@ -57,7 +57,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Categories</label>
                         <div class="col-sm-10">
-                            <g:select name="categoryName" optionKey="category" type="select" class="form-control" from="${etsena.Categories.list()}" value="${fieldValue(bean: product, field: "categoryName")}" />
+                            <g:select name="categoryName.category" id="id" optionKey="category" value="${fieldValue(bean: product, field: "categoryName")}" type="select" class="form-control" from="${etsena.Categories.list()}"  />
                         </div>
                     </div>
                     <div class="form-group row">
@@ -69,7 +69,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 control-label">Lien Images</label>
                         <div class="col-sm-10">
-                            <g:textArea name="prodDesc" class="form-control" value="${fieldValue(bean: product, field: "prodImageUrl")}" type="text" placeholder="Image"  />
+                            <g:textArea name="prodImageUrl" class="form-control" value="${fieldValue(bean: product, field: "prodImageUrl")}" type="text" placeholder="Image"  />
                         </div>
                     </div>
                     <div class="form-group row">

@@ -4,9 +4,10 @@
         <meta name="layout" content="templates" />
         <g:set var="entityName" value="${message(code: 'product.label', default: 'Product')}" />
         <title><g:message code="default.create.label" args="[entityName]" /></title>
+
     </head>
     <body>
-    <section class="content-header">
+     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
@@ -85,15 +86,16 @@
                     <div class="form-group row">
                         <label class="col-sm-2 control-label">Prix</label>
                         <div class="col-sm-10">
-                            <g:textField name="prodPrice" class="form-control" value="${params?.prodPrice}" type="text" placeholder="Prix"/>
+                            <g:textField name="prodPrice" class="form-control" value="${params?.prodPrice}" type="textArea" placeholder="Prix"/>
                         </div>
                     </div>
                 </div>
 
                 <!-- /.card-body -->
                 <div class="card-footer">
-                    <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" />
-                    <button type="submit" class="btn btn-default float-right">Cancel</button>
+                    <g:submitButton name="create"  class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" />
+                    <button type="button" class="snack btn btn-default float-right"><a href="${createLink(controller: 'product', action: 'index')}">Cancel</a></button>
+
                 </div>
                 <!-- /.card-footer -->
             </g:form>
@@ -101,6 +103,8 @@
         <!-- /.card -->
 
     </div>
-    <!--/.col (left) -->
+    <!-- Toast -->
+     <!--/.col (left) -->
+
     </body>
 </html>

@@ -7,7 +7,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <title>ETSENA</title>
     <meta name="layout" content="home" />
     <g:set var="entityName" value="${message(code: 'product.label', default: 'Product')}" />
 </head>
@@ -32,9 +31,9 @@
             <h2 class="h5 text-uppercase mb-4">Browse our categories</h2>
         </header>
         <div class="row">
-            <div class="col-md-4 mb-4 mb-md-0"><a class="category-item" href="#"><asset:image class="img-fluid" src="product/laptopCat.jfif" alt=""/><strong class="category-item-title">Laptop</strong></a></div>
-            <div class="col-md-4 mb-4 mb-md-0"><a class="category-item mb-4" href="#"><asset:image class="img-fluid" src="product/smartphonesCat.jfif" alt=""/><strong class="category-item-title">Smartphones</strong></a><a class="category-item" href="#"><asset:image class="img-fluid" src="product/laptopCat.jfif" alt=""/><strong class="category-item-title">Laptop</strong></a></div>
-            <div class="col-md-4"><a class="category-item" href="#"><asset:image class="img-fluid" src="product/cat-img-4.jpg" alt=""/><strong class="category-item-title">Accesoires</strong></a></div>
+            <div class="col-md-4 mb-4 mb-md-0"><a class="category-item" href="#"><asset:image class="img-fluid" src="product/category-2.jpg" alt=""/><strong class="category-item-title">Accesoires</strong></a></div>
+            <div class="col-md-4 mb-4 mb-md-0"><a class="category-item mb-4" href="#"><asset:image class="img-fluid" src="product/tabletsCat.png" alt=""/><strong class="category-item-title">Tablets</strong></a><a class="category-item" href="#"><asset:image class="img-fluid" src="product/smartphone.jpg" alt=""/><strong class="category-item-title">Smartphones</strong></a></div>
+            <div class="col-md-4"><a class="category-item" href="#"><asset:image class="img-fluid" src="product/cat-img-4.jpg" alt=""/><strong class="category-item-title">Electronics</strong></a></div>
 
         </div>
     </section>
@@ -49,7 +48,7 @@
             <div class="col-xl-3 col-lg-4 col-sm-6">
                 <div class="product text-center">
                     <div class="position-relative mb-3">
-                        <div class="badge text-white badge-"></div><a class="d-block" href="#"><img src="${fieldValue(bean:  productInstance, field:"prodImageUrl")}" width="200px" height="200px"/></a>
+                        <div class="badge text-white badge-"></div><a class="d-block" href="${createLink(controller: 'home', action: 'showProductDetails', id: productInstance.id)}"><img src="${fieldValue(bean:  productInstance, field:"prodImageUrl")}" width="200px" height="200px"/></a>
                         <div class="product-overlay">
                             <ul class="mb-0 list-inline">
                                 <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#"><i class="far fa-heart"></i></a></li>
@@ -59,7 +58,7 @@
                         </div>
                     </div>
                     <h6> <a class="reset-anchor" href="#">${fieldValue(bean: productInstance, field: "prodName")}</a></h6>
-                    <p class="small text-muted">${fieldValue(bean: productInstance, field: "prodPrice")}</p>
+                    <p class="small text-muted">${fieldValue(bean: productInstance, field: "prodPrice")} Euro</p>
                 </div>
             </div>
         </g:each>

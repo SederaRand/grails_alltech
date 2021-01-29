@@ -9,8 +9,12 @@ class UrlMappings {
             }
         }
 
+        // BackOffice Mapping
         "/admin"(controller:'login', action:'auth')
-        "/home/index"(view: '/home/index')
+
+        //FrontOffice Mapping
+        "/"(controller: 'home', view: '/home/index')
+
         "500"(view:'/error')
         "404"(view:'/notFound')
     }

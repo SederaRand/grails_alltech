@@ -1,5 +1,7 @@
 package etsena
 
+import org.hibernate.type.descriptor.sql.VarcharTypeDescriptor
+
 class Product {
 
     String prodCode
@@ -17,7 +19,7 @@ class Product {
         prodCode nullable: false, blank: false
         prodName nullable: false, blank: false
         categoryName nullable: false, blank:false
-        prodDesc nullable: false, blank: false
+        prodDesc nullable: false, blank: false, length: 500
         prodImageUrl nullable: true
         prodStatus nullable:false, blank:false
         prodQuantity nullable: false, blank:false

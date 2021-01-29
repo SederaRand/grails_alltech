@@ -6,7 +6,9 @@
         <title><g:message code="default.list.label" args="[entityName]" /></title>
 
     </head>
-    <body>
+    <div>
+
+    <div class="snack"></div>
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">List Product </h3>
@@ -29,6 +31,7 @@
                     <th>Status</th>
                     <th>Quantity</th>
                     <th>Price</th>
+                    <th>Delete</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -37,6 +40,7 @@
 
             </table>
         </div>
+
         <!-- /.card-body -->
     </div>
     <!-- /.card -->
@@ -47,6 +51,20 @@
     </div>
     <!-- /.container-fluid -->
     </section>
+    <div class="modal fade" id="btn-remove" data-id="">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Vous-êtes sur de supprimer ce package?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Supprimer</button>
+                    <button type="button" data-dismiss="modal" class="btn">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     </body>
 </html>
